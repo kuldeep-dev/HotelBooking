@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" ng-app='fwrk.admin'>
+<head>
+  <meta charset="utf-8">
+  <title>Hotel Dashboard</title>
+  <meta name="description" content="Hotel Booking">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="kuldeep Kumar">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+            <!-- Core CSS - Include with every page -->
+        <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+
+        <!-- SB Admin CSS - Include with every page -->
+        <link href="/admin/css/sb-admin.css" rel="stylesheet">
+        <!-- Custome style -->
+        <link href="/admin/css/style.css" rel="stylesheet" type="text/css" />       
+        <link href="/admin/css/datepicker.css" rel="stylesheet" type="text/css" /> 
+        <link rel="stylesheet/less" type="text/css" href="/admin/css/datepicker.less" />
+        <!--calendar-->
+        <link href='/admin/js/calendar/fullcalendar.min.css' rel='stylesheet' />
+        <link href='/admin/js/calendar/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+        
+        <style>
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+        </style>
+
+  
+</head>
+<body class="skin-blank" ng-cloak>
+<page-loader latency="500"></page-loader>
+                <div id="wrapper">
+                    <nav class="navbar navbar-default navbar-fixed-top hotel-bkng" role="navigation" style="margin-bottom: 0">
+                        <div ng-include='"/admin/templates/element/header.html"'></div>
+                    </nav>
+                    <div class="navbar-default navbar-static-side nbr-static" role="navigation">
+      <div class="sidebar-collapse">
+        <ul class="nav side-menu" id="side-menu">
+          
+          <li> <a href="/admin/dashboard/" class="active"> <img src="/admin/image/dashboard-icon.png" alt="">Dashboard</a> </li>
+          <li id="bkng"> <a href="/admin/dashboard#/booking"><img src="/admin/image/booking-icon.png" alt=""> Bookings</a> 
+            
+            <!-- /.nav-second-level --> 
+          </li>
+          <li id="stff"> <a href="/admin/dashboard#/add_staff"><img src="/admin/image/staff.png" alt="">Add Staff</a> </li>
+          <li id="admnu"> <a href="/admin/dashboard#/add_menu"><img src="/admin/image/addmnu.png" alt="">Add Menu</a> </li>
+          <li id="srvc"> <a href="/admin/dashboard#/service_tickets"><img src="/admin/image/service-icon.png" alt="">Service Tickets</a> </li>
+          <li id="clnt"> <a href="/admin/dashboard#/client_thacking"><img src="/admin/image/client-thacking.png" alt="">Client Thacking</a> </li>
+          <li id="rstrnt"> <a href="/admin/dashboard#/resturant_orders"><img src="/admin/image/client-thacking.png" alt="">Restaurant Orders</a> </li>
+          <li id="bkng"> <a href="/admin/dashboard#/add_room"><img src="/admin/image/room-icon.png" alt="">Add Rooms</a> </li>
+           <li id="adtnl"> <a href="/admin/dashboard#/add_service"><img src="/admin/image/additional-service.png" alt="">Additional Service</a> </li>
+          <li id="chkot"> <a href="/admin/dashboard#/checkout"><img src="/admin/image/checkout-icon.png" alt="">Check Out</a> </li>
+          <ul  class="nav nav-tabs" ng-include='"/admin/templates/nav.html"'></ul>   
+          
+        </ul>
+        <!-- /#side-menu --> 
+      </div>
+      <!-- /.sidebar-collapse --> 
+         
+    </div>
+                    <div ui-view class='full-height' id='main-content'></div>
+            <!-- <div ng-include='"/admin/templates/element/footer.html"'></div> -->
+            <div class="control-sidebar-bg"></div>
+                </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-sanitize.js"></script>
+  <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  
+  
+  
+  <script src='/admin/js/lib/markdown.js'></script>
+  <script src='/admin/js/app.js'></script>
+  <script src='/admin/js/controllers.js'></script>
+  <script src='/common/modules/users.js'></script>
+  <script src='/common/modules/customers.js'></script>
+  <script src='/common/modules/rooms.js'></script>
+  <script src='/common/modules/services.js'></script>
+  <script src='/common/modules/pages.js'></script>
+  <script src='/common/modules/resturants.js'></script>
+  <script src='/common/modules/hotel_staffs.js'></script>
+  <script src='/common/modules/menus.js'></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+ <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+  
+  <!--for PDF-->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+  
+  <!--calendar-->
+  <script src='/admin/js/calendar/moment.min.js'></script>
+  <script src='/admin/js/calendar/fullcalendar.min.js'></script>
+   
+  <!--circle-->
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
+  <script src="/admin/js/circle-progress.js"></script>
+  
+
+  <!-- Core Scripts - Include with every page --> 
+<!--<script src="/admin/js/jquery-1.10.2.js"></script> -->
+<script src="/admin/js/bootstrap.min.js"></script> 
+<script src="/admin/js/plugins/metisMenu/jquery.metisMenu.js"></script> 
+
+
+
+<!-- SB Admin Scripts - Include with every page --> 
+<script src="/admin/js/sb-admin.js"></script> 
+
+<!-- Page-Level Demo Scripts - Dashboard - Use for reference --> 
+ 
+
+  <link rel="stylesheet" href="https://cdn.rawgit.com/codekraft-studio/angular-page-loader/master/dist/angular-page-loader.css">
+  <script type="text/javascript" src="https://cdn.rawgit.com/codekraft-studio/angular-page-loader/master/dist/angular-page-loader.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('.add_more').click(function(e){
+          e.preventDefault();
+          $(this).before("<input name='file[]' type='file'/>");
+        });
+      });
+    </script>
+  <script type='text/javascript'>
+    var currentUser = <%- JSON.stringify(user); %>;
+    adminApp.run(function($rootScope){
+      $rootScope.currentUser = currentUser;
+    });
+  </script>
+  
+<script type="text/javascript" src="/admin/js/bootstrap-datepicker.js"></script> 
+
+
+<script src="/admin/js/angular-ticking-clock.js"></script>         
+         
+
+
+
+</body>
+</html>

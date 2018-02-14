@@ -1,0 +1,256 @@
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="service-page">
+       <div class="col-sm-6">
+        <h1 class="page-header">Menu</h1>
+        </div>
+         
+        </div>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="service-tickets">
+        <div class="col-sm-12">
+        <div class="addrom">
+      <button class="btn defult_btn-yellow"  data-toggle="modal" data-target="#addmenu">Add Menu</button>
+           </div>
+        </div>
+		
+        <div class="ticket-detils">
+        
+       <table id="menudata" class="table table-striped table-bordered" cellspacing="0" width="100%">
+           <thead>
+          <tr>
+            <th>Sr. No.</th>
+            <th>Menu</th>
+            <th>Description</th>
+             <th>Action</th>    
+          </tr>
+          </thead>
+          <tr ng-repeat='menualldata in menudata track by $index'>
+                <td ng-class="'{{menualldata._id}}'">{{$index+1}}</td>           
+                <td ng-class="'{{menualldata._id}}'">{{menualldata.menu_name}}</td>
+                <td ng-class="'{{menualldata._id}}'">{{menualldata.description}}</td>
+                <td>
+                <span><i ng-class="'{{menualldata._id}}'" ng-click='setActive(menualldata)' class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#menuitem"></i></span>|
+                <span><i ng-class="'{{menualldata._id}}'" ng-click='setActive(menualldata)' class="fa fa-plus" aria-hidden="true" data-toggle="modal"  data-target="#addmenuitem"></i></span> |       
+                <span><i ng-class="'{{menualldata._id}}'" ng-click="setActive(menualldata)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editmenu"></i></span> |
+                <span><i ng-click="deletemenu(menualldata._id)" ng-class="'{{menualldata._id}}'" class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>
+          </tr>
+          
+          
+        </table>
+
+          
+        </div><!--profile-detils ends-->
+
+			</div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+
+<!-- Modal -->
+<div id="addmenu" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Menu</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" id="serviceform" ng-submit="newmenudata()">
+  <div class="form-group">
+    <label for="email">Menu:</label>
+    <input ng-model='menu.menuname' type="text" class="form-control" id="">
+  </div>
+  
+    <div class="form-group">
+    <label for="pwd">Description:</label>
+    <textarea class="form-control" ng-model='menu.description' id="psw" ></textarea>
+  </div>     
+  
+  
+          <button type="submit" class="btn defult_btn-green">Submit</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+
+<div id="editmenu" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Menu</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="editmenudata()"> 
+          
+     <div class="form-group">
+    <label for="email">Menu:</label>
+    <input ng-model='activemenu.menu_name' type="text" class="form-control" id="">
+  </div>
+  
+    <div class="form-group">
+    <label for="pwd">Description:</label>
+    <textarea class="form-control" ng-model='activemenu.description' id="psw" ></textarea>
+  </div>  
+  
+          <button type="submit" class="btn defult_btn-green">Update</button>
+    </form>
+      </div>
+      
+    </div>
+
+  </div>
+</div> 
+
+
+<div id="menuitem" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Menu Item Details</h4>
+      </div>
+    <table id="menuitem" width="100%" border="0" cellspacing="0" cellpadding="0" class="tickts-tabl">
+          <thead>
+        <tr>
+                <th>Sr.No.</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Action</th>
+          </tr>
+          </thead>
+          <tr ng-repeat=" allmenuitem in activemenu.menu_item track by $index ">
+                <td ng-class="'{{allmenuitem._id}}'">{{$index+1}}</td>           
+                <td ng-class="'{{allmenuitem._id}}'">{{allmenuitem.name}}</td>
+                <td ng-class="'{{allmenuitem._id}}'">${{allmenuitem.price}}</td>
+                <td ng-class="'{{allmenuitem._id}}'"><img style="width: 100px;" src="{{allmenuitem.item_image}}"></td>
+                <td ng-class="'{{allmenuitem._id}}'">{{allmenuitem.description}}</td>
+                <td>
+                    <span><i ng-class="'{{allmenuitem._id}}'" ng-click="setActivemenuitem(allmenuitem)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editmenuitems"></i></span>|
+                    <span><i ng-click="deletemenuitems(allmenuitem._id)" ng-class="'{{allmenuitem._id}}'" class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>
+          </tr>
+        </table>
+      
+    </div>
+
+  </div>
+</div>
+
+
+
+<div id="addmenuitem" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add menu items</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="addmenuitems()"> 
+          
+        <div class="form-group">
+    <label for="email">Name:</label>
+    <input ng-model='menuitem.name' type="text" class="form-control" id="">
+  </div>
+       
+          <div class="form-group">
+    <label for="email">Price:</label>
+    <input ng-model='menuitem.price' type="number" class="form-control" id="" min="0">
+  </div>
+    
+   <div class='col-lg-12'>
+        <div class="form-group" style="margin-left: -14px;">
+        <label for="exampleInputPassword1">Item Image</label> <br>                 
+        <img  ng-src="{{menu_item_image}}" id="photo-id"  width="100px;"/>
+        <input type="file" name="file" multiple onchange="angular.element(this).scope().item_image(this)" id="photo-upload"/>
+        <p ng-show="loading">...UPLOADING...</p>
+        </div>
+ </div> 
+          
+  
+    <div class="form-group">
+    <label for="pwd">Description:</label>
+    <textarea class="form-control" ng-model='menuitem.description' id="psw" ></textarea>
+  </div>  
+           
+  
+          <button type="submit" class="btn defult_btn-green">Submit</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div> 
+
+
+<div id="editmenuitems" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Menu items</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="editmenuitemsdata()"> 
+          
+     <div class="form-group">
+    <label for="email">Name:</label>
+    <input ng-model='activemenu_item.name' type="text" class="form-control" >
+  </div>
+       
+          <div class="form-group">
+    <label for="email">Price:</label>
+    <input ng-model='activemenu_item.price' type="text" class="form-control" min="0">
+  </div>
+          
+   <div class='col-lg-12'>
+        <div class="form-group">
+        <div class="profile-cirlc">
+        <div class="profile-imag">
+        <img ng-if="!activemenu_item.item_image" src="/admin/image/noimage.png" alt="no image" class="profle-btn" width="150px">
+        <img ng-if="activemenu_item.item_image && !menu_item_image" ng-src="{{activemenu_item.item_image}}" alt="#" width="150px" class="profle-btn">
+        <img ng-src="{{menu_item_image}}" ng-show="menu_item_image" alt="#" class="profle-btn" width="150px">
+        </div></div></div>
+        <input type="file" name="file" multiple onchange="angular.element(this).scope().item_image(this)" id="photo-upload"/>
+        <p ng-show="loading">...UPLOADING...</p>
+    </div> 
+          
+          
+  
+    <div class="form-group">
+    <label for="pwd">Description:</label>
+    <textarea class="form-control" ng-model='activemenu_item.description' id="psw" ></textarea>
+  </div>  
+  
+          <button type="submit" class="btn defult_btn-green">Update Items</button>
+    </form>
+      </div>
+      
+    </div>
+
+  </div>
+</div> 

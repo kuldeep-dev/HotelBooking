@@ -1,0 +1,155 @@
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="service-page">       
+        <h1 class="page-header">Checkout</h1>      
+         
+        </div>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="service-tickets">
+        <div class="col-sm-12">
+        <div class="check-lst">
+        <h2>Checkout List</h2>
+        </div>
+           
+        </div>
+    
+        <div class="ticket-detils">
+        <h3>Customer Information</h3>
+        
+       <table id="checkout" class="table table-striped table-bordered" cellspacing="0" width="100%">
+           <thead>
+          <tr>
+            <th>Sr. No.</th>  
+            <th>Date</th>
+            <th>Room no.</th>
+            <th>Guest name</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Payment</th>
+            <th>Assigned by</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+           </thead>
+           <tbody>
+          <tr ng-repeat='custom in customer track by $index'>          
+                                 <td ng-class="'{{custom._id}}'">{{$index+1}}</td> 
+                                 <td ng-class="'{{custom._id}}'">{{custom.created_at | date}}</td>
+                                 <td ng-class="'{{custom._id}}'"><li ng-repeat="item in custom.room_booked">
+                                    {{item.room_number}}
+                                </li></td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.name}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.arrival_date | date}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.departure_date | date}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.payment}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.assigned_by}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.status}}</td>
+                                 <td>
+                                     <span><i ng-class="'{{custom._id}}'" ng-click="setActive(custom)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#updatestatus"></i></span>|
+                                     <span ng-class="'{{custom._id}}'" ng-click='setActive(custom)'><i class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#customerdetails"></i></span>
+                                 </td> 
+          </tr>
+           </tbody>
+          
+        </table>
+
+          
+        </div><!--profile-detils ends-->
+
+      </div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="customerdetails" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cutomer Details</h4>
+        
+      </div>
+        <div class="modal-body">
+                <table class="table table-hover">
+                           <tr> <th>Fields</th> <th>Data</th></tr>
+                            <tr> <td>Name</td> <td>{{activecheckoutcus.name}}</td> </tr>
+                            <tr> <td>ID</td> <td>{{activecheckoutcus.govt_id}}</td> </tr>
+                            <tr> <td>ID image</td> <td><img ng-if="!activecheckoutcus.govt_id_image" src="/admin/image/noimage.png" alt="no image" width="150px" height="150px"  class="profle-btn">
+                                                       <img ng-if="activecheckoutcus.govt_id_image" ng-src="{{activecheckoutcus.govt_id_image}}" alt="#" width="150px" height="100px" class="profle-btn"></td> </tr>
+                           
+                            <tr> <td>Email</td> <td>{{activecheckoutcus.email}}</td> </tr>
+                            <tr> <td>DOB</td> <td>{{activecheckoutcus.dob | date}}</td> </tr>
+                            <tr> <td>Adult</td> <td>{{activecheckoutcus.adults}}</td> </tr>
+                            <tr> <td>Children</td> <td>{{activecheckoutcus.children}}</td> </tr>
+                            <tr> <td>Phone</td> <td>{{activecheckoutcus.phone}}</td> </tr>
+                            <tr> <td>Address</td> <td>{{activecheckoutcus.address}}</td> </tr>
+                            <tr> <td>Description</td> <td>{{activecheckoutcus.description}}</td> </tr>
+                            <tr> <td>Check-In Date</td> <td>{{activecheckoutcus.arrival_date | date}}</td> </tr>
+                            <tr> <td>Check-Out Date</td> <td>{{activecheckoutcus.departure_date | date}}</td> </tr>
+                            <tr> <td>Status</td> <td>{{activecheckoutcus.status}}</td> </tr>
+                            <tr> <td>Assigned By</td> <td>{{activecheckoutcus.assigned_by}}</td> </tr>
+                            <tr> <td>Payment</td> <td>{{activecheckoutcus.payment}}</td> </tr>
+                            <tr> <td>Payment Method</td> <td>{{activecheckoutcus.payment_method}}</td> </tr>
+                            <tr> <td>Room Number</td> <td><li ng-repeat="item in activecheckoutcus.room_booked">
+                               {{item.room_number}}
+                            </li></td> </tr>
+                            <tr> <td>Room Type</td> <td><li ng-repeat="item in activecheckoutcus.room_booked">
+                               {{item.room_type}}
+                            </li></td> </tr>
+                            <tr> <td>Booking Date</td> <td>{{activecheckoutcus.created_at | date}}</td> </tr>
+                            <tr> <td>Payment</td> <td>{{activecheckoutcus.payment}}</td> </tr>
+                            <tr> <td>Payment method</td> <td>{{activecheckoutcus.payment_method}}</td> </tr>
+                            <tr> <td>Discount</td> <td>{{activecheckoutcus.discount}}</td> </tr>
+                            <tr> <td>Total</td> <td>{{activecheckoutcus.total}}</td> </tr>
+                            
+                                           
+                </table>
+  
+        
+      </div>
+      <div class="modal-footer"> </div>
+    </div>
+  </div>
+</div>
+  
+  
+  <div id="updatestatus" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Customer Status</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="changestatuscus()">
+  <div class="form-group">
+    <label for="pwd">Status:</label>
+    <select class="form-control" ng-model='activecheckoutcus.status'>
+                    <option value="" disabled>---Status---</option>
+                    <option value="staying">Staying</option>
+                    <option value="checkout">Checkout</option>
+    </select>
+                              
+  </div> 
+      
+          <button type="submit" ng-click="" class="btn defult_btn-green">Update Status</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div>

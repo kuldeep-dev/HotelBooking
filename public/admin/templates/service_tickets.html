@@ -1,0 +1,183 @@
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="service-page">
+       <div class="col-sm-6">
+        <h1 class="page-header">Services tickets</h1>
+        </div>
+        </div>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="service-tickets">
+        <div class="col-sm-12">
+		
+           <div class="seacrh-rgt">
+              <div class="seacrh-group">
+                  <input type="text" name="q" class="form-control" ng-model="searchser" placeholder="Search...">
+                <i class="fa fa-search" aria-hidden="true"></i> </div>
+            </div>
+        </div>
+		
+        <div class="ticket-detils">
+        
+       <table id="serviceclient" class="table table-striped table-bordered" cellspacing="0" width="100%">
+           <thead> <tr>
+                <th>Sr. No.</th>   
+                <th>Date</th>
+                <th>Customer Name</th>
+                <th>Room Type</th>
+                <th>Room No.</th>
+                <th>Assigned by</th>
+                <th>Action</th>
+               </tr></thead>
+           <tbody>
+          <tr ng-repeat=" service in customerservice | filter : searchser track by $index">
+                <td ng-class="'{{custom._id}}'">{{$index+1}}</td>
+                <td ng-class="'{{service._id}}'">{{service.created_at | date}}</td>
+                <td ng-class="'{{service._id}}'">{{service.name}}</td>
+                <td ng-class="'{{service._id}}'"><li ng-repeat="item in service.room_booked">
+                                    {{item.room_type}}
+                                </li></td>
+                <td ng-class="'{{service._id}}'"><li ng-repeat="item in service.room_booked">
+                                    {{item.room_number}}
+                                </li></td>
+                <td ng-class="'{{service._id}}'">{{service.assigned_by}}</td>
+                <td><span><i ng-class="'{{service._id}}'" ng-click='setActive(service)' class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#clientservicedetails"></i></span> |
+                <span><i ng-class="'{{service._id}}'" ng-click='setActive(service)'  class="fa fa-plus" aria-hidden="true" data-toggle="modal"  data-target="#addclientservice"></i></span></td>
+          
+          </tr>
+           </tbody>
+        </table>
+
+          
+        </div><!--profile-detils ends-->
+
+			</div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+  
+  <div id="clientservicedetails" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Client Service Details</h4>
+      </div>
+    <table id="servicedescs" width="100%" border="0" cellspacing="0" cellpadding="0" class="tickts-tabl">
+          <tr>
+                <th>Sr. No.</th>   
+                <th>Date</th>
+                <th>Service</th>
+                <th>Price</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Action</th>
+          </tr>
+          <tr ng-repeat=" servicenew in activeCustomerservice.client_service track by $index">
+                <td ng-class="'{{servicenew._id}}'">{{$index+1}}</td>
+                <td ng-class="'{{servicenew._id}}'">{{servicenew.created_at | date:'dd/MM/yyyy'}}</td>
+                <td ng-class="'{{servicenew._id}}'">{{servicenew.service}}</td>
+                <td ng-class="'{{servicenew._id}}'">${{servicenew.price}}</td>
+                <td ng-class="'{{servicenew._id}}'">{{servicenew.assigned_to}}</td>
+                <td ng-class="'{{servicenew._id}}'">{{servicenew.status}}</td>
+                <td ng-class="'{{servicenew._id}}'">{{servicenew.description}}</td>
+                <td><span><i ng-class="'{{servicenew._id}}'" ng-click="setActiveservice(servicenew)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editserviceticket"></i></span>|
+                <span><i ng-click="deleteservice(servicenew._id)" ng-class="'{{servicenew._id}}'" class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>
+          </tr>
+        </table>
+      
+    </div>
+
+  </div>
+</div>
+  
+  
+  
+ <div id="editserviceticket" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Service</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="editclientservice()"> 
+         <div class="form-group">
+    <label for="email">Service: {{activeserice.service}}</label>
+    
+  </div>
+          
+     <div class="form-group">
+    <label for="email">Status:</label>
+     <select class="form-control selct-food" ng-model='editclient_service.status'>
+                    <option value="Done">Done</option>
+                    
+                 </select>
+  </div>      
+          
+          <button type="submit" ng-click="closedetails()" class="btn defult_btn-green">Update status</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div> 
+ 
+
+<div id="addclientservice" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Service</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="addclientservice()"> 
+         <div class="form-group">
+    <label for="email">Service:</label>
+    <input ng-model='client_service.service_client' type="text" class="form-control" placeholder="Service">
+  </div>
+    <div class="form-group">
+    <label for="email">Price:</label>
+    <input ng-model='client_service.price' type="number" class="form-control" placeholder="Price">
+  </div>  
+          
+       <div class="form-group">
+        <label for="email">Assigned to:</label>   
+       <select ng-model="client_service.assigned_to">
+            <option value="" disabled>---Select Staff---</option>
+            <option ng-repeat="staff in hotelstaff" value="{{staff.name}}">{{staff.name}}</option>
+       </select> 
+       </div>
+          
+          
+        
+          <div class="form-group">
+    <label for="email">Description:</label>
+    <textarea class="form-control" cols="120" ng-model='client_service.description' rows="4" placeholder="Description"></textarea>
+  </div>
+      
+  
+          <button type="submit" class="btn defult_btn-green">Submit</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div> 

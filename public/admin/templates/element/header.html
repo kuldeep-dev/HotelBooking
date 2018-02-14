@@ -1,0 +1,26 @@
+
+    <div class="navbar-header" >
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand logo" href="#" class="logo">HOTEL BOOKING</a> </div>
+      <!-- /.navbar-header -->
+    
+    <ul class="nav navbar-top-links navbar-right top-nvgtn">
+      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-calendar" aria-hidden="true"></i> <ticking-clock date-time-format="EEEE dd-MMMM-yyyy" update-interval="1000"></ticking-clock></a> </li>
+      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-calendar" aria-hidden="true"></i> <ticking-clock date-time-format="hh:mm a" update-interval="1000"></ticking-clock> </a> </li>
+      <li>
+        <div class="username">
+          <h1>{{currentUser.name}}</h1>
+          <h2>Manager</h2>
+        </div>
+        <div class="drop"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <div class="prfole-photo"> <img ng-src="{{currentUser.image}}" alt="" class="img-circle" > </div>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span> </a>
+          <ul class="dropdown-menu">
+                <li><a href="/admin/dashboard#/my_profile">My Profile</a></li>
+          </ul>
+          </a> </div>
+      </li>
+      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" ng-click="go()"> <img src="/admin/image/logout.png" alt=""> </a> </li>
+    </ul>
+    <!-- /.navbar-top-links -->
+  

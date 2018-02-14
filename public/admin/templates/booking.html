@@ -1,0 +1,578 @@
+<style>
+    .datepicker {
+      z-index: 1600 !important; /* has to be larger than 1050 */
+    }
+    .vlauehidden {visibility: hidden;}
+    span.fc-time {
+    display: none;
+}
+</style>
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Bookings</h1>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="calender-tbl">
+          <ul class="nav nav-tabs">
+            <li id="calender" class="active" ng-click="cal()"><a data-toggle="tab">Calender</a></li>
+            <li id="bookings" ng-click="book()"><a data-toggle="tab">Bookings</a></li>
+            <li id="addbook" ng-click="addbook()"><a data-toggle="tab">Add Booking</a></li>
+            <li id="invoice" ng-click="invoice()"><a data-toggle="tab">Invoices</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="calender" class="tab-pane fade cal in active">
+              <div class="col-sm-12">
+                  <div style='margin:10px 0;' id='calendar'></div>
+              </div>
+            </div>
+            <div id="bookings" class="tab-pane fade bokingdtsl-tbl">
+              <div class="details">
+                <h3><span>Details</span></h3>
+                <div class="detailsinnr">
+                  <div class="col-sm-12">
+                      <table id="room" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                           <tr>
+                             <th>Sr. No.</th>
+                             <th>Booking Date</th>
+                             <th>Room Number</th>
+                             <th>Guest Name</th>
+                             <th>Check In</th>
+                             <th>Check Out</th>
+                             <th>Assigned By</th>
+                             <th>View</th>           
+<!--                             <th>Edit</th>
+                             <th>Delete</th>-->
+                           </tr>
+                           </thead>
+                           <tr ng-repeat='custom in customer track by $index'> 
+                                 <td ng-class="'{{custom._id}}'">{{$index+1}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.created_at | date}}</td>
+                                 <td ng-class="'{{custom._id}}'"><li ng-repeat="item in custom.room_booked">
+                                    {{item.room_number}}
+                                </li></td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.name}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.arrival_date | date}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.departure_date | date}}</td>
+                                 <td ng-class="'{{custom._id}}'">{{custom.assigned_by}}</td>
+                                 <td ng-class="'{{custom._id}}'" ng-click='setActive(custom)'><i class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#viewbooking"></i></td>         
+<!--                                 <td ng-class="'{{custom._id}}'" ng-click="setActive(hotelroom)"><span><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editroom"></i></span></td>
+                                 <td ng-click="deleteroom(hotelroom._id)" ng-class="'{{hotelroom._id}}'"><span><i class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>-->
+                           </tr>
+          
+          
+        </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="addookings" class="tab-pane fade addbook">
+              <div class="add-booking">
+                <div class="details-inner">
+                     <form class="form-horizontal" method="post" ng-submit="newbookingdata()">
+                  <h3><span>Details</span></h3>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="booking-dtls">
+                        <h2>Booking Details</h2>
+                        <div class="bkg-dtlsinnr">
+                          
+                            <div class="form-group">
+                              <label class="control-label col-sm-3">Client:</label>
+                              <div class="col-sm-9">
+                                <div class="clint-dtls">
+                                    <input type="button" ng-click="modelclient()" class="form-control add-clntdtls" id="myBtn" value="Add Client Details">
+                                  <div class="icn-add"> <i class="fa fa-plus-circle" aria-hidden="true"></i> </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-sm-3">Check in:</label>
+                              <div class="col-sm-9">
+                                <div class='input-group date' id='datetimepicker1'>
+                                   <input  class="form-control" ng-model='booking.arrival_date' id="checkindate" name="date" placeholder="DD/MM/YYYY" type="text"/>
+                                  <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> 
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-sm-3">Check out:</label>
+                              <div class="col-sm-9">                          
+                                <div class='input-group date' id='datetimepicker1'>
+                                  <input class="form-control" ng-model='booking.departure_date'  id="checkoutdate" name="date" placeholder="DD/MM/YYYY" type="text"/>
+                                  <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> 
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-sm-3">Total Days:</label>
+                              <div class="col-sm-9">                          
+                                <div class='input-group'>
+                                    <strong>{{totalstayingdays}}</strong>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="booking-dtls">
+                        <h2>Additional Services</h2>
+                        <div class="bkg-dtlsinnr aditnl-serv">
+                          <div class="checkbox checkbox-primary" ng-repeat='serv in servicedata'>
+                              <input type="checkbox" name="serice" class="services" value="{{serv}}"  ng-click="selectedValue(serv,servicedetails)" ng-model="servicedetails">
+                            <label for="checkbox2">{{serv.service}}/${{serv.price}}</label>
+                          </div>
+                            <!--test-->
+<!--                            <label ng-repeat="role in servicedata">
+                                <input type="checkbox" checklist-model="user.roles" checklist-value="role">{{role.service}}/${{role.price}}
+                              </label>-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="booking-dtls">
+                        <h2>Rooms</h2>
+                        <div class="bkg-dtlsinnr aditnl-serv">
+                          <table id="roomdata" width="100%" border="0" cellspacing="0" cellpadding="0" class="rooms-tbl">
+                            <tr>
+                              <th>Room type</th>
+                              <th>Room number</th>
+                              <th>Price</th>
+                              <th>Delete</th>
+                            </tr>
+                          </table>
+                          <div class="col-sm-12">
+                            <div class="clint-dtls">
+                              <select ng-model="selectedroom" ng-change="changedValue(selectedroom)">
+                                  <option value="" disabled>---Add Room---</option>
+                                  <option ng-repeat="x in roomavai" value="{{x}}">{{x.room_type}} | Room No.: {{x.room_number}}</option>
+                                </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="booking-dtls">
+                        <h2>Amount to Pay</h2>
+                        <div class="bkg-dtlsinnr aditnl-serv">
+                          <div class="payment-meth">
+                            <div class="invoice-tbl">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0" class="sidetr">
+                                <tr>
+                                  <th>Description</th>
+                                  <th>Unit Price</th>
+                                  <th>Days/Quantity</th>
+                                  <th>Line Total</th>
+                                </tr>
+                                <tr ng-repeat="data in new_service">
+                                  <td>{{data.service}}</td>
+                                  <td>${{data.price}}</td>
+                                  <td></td>
+                                  <td>${{(data.price)}}</td>
+                                </tr>
+                               <tr  ng-repeat="roomdata in rowdata" class="{{roomdata.room_number}}">
+                                  <td>{{roomdata.room_number}}</td>
+                                  <td>${{roomdata.price}}</td>
+                                  <td>{{totalstayingdays}}</td>
+                                  <td>${{roomdata.price*totalstayingdays}}</td>
+                                </tr>
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td><strong>Total</strong></td>
+                                  <td><strong>${{subtotal}}</strong></td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   
+                    
+                  </div>
+                    <button type="submit" class="btn defult_btn-green"><span class="glyphicon glyphicon-off"></span> Submit</button> 
+                 </form>
+                </div>
+              </div>
+                 
+            </div>
+            <div id="invoices" class="tab-pane fade invoice-amout">
+              <h3>Amount to Pay</h3>
+              <div class="col-sm-12">
+                      <table id="invoicebill" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                           <tr>
+                             <th>Sr. No.</th>
+                             <th>Booking Date</th>
+                             <th>Room Number</th>
+                             <th>Guest Name</th>
+                             <th>Invoice</th>         
+                           </tr>
+                           </thead>
+                           <tr ng-repeat='list_invoice in in_custom track by $index'>      
+                               <td ng-class="'{{custom._id}}'">{{$index+1}}</td>
+                                 <td ng-class="'{{list_invoice._id}}'">{{list_invoice.created_at | date}}</td>
+                                 <td ng-class="'{{list_invoice._id}}'"><li ng-repeat="item in list_invoice.room_booked">
+                               {{item.room_number}}
+                           </li></td>
+                                 <td ng-class="'{{list_invoice._id}}'">{{list_invoice.name}}</td>
+                                 <td ng-class="'{{list_invoice._id}}'" ng-click='ActiveInvoice(list_invoice)'><i class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#invoicebill_cus"></i></td>         
+<!--                                 <td ng-class="'{{custom._id}}'" ng-click="setActive(hotelroom)"><span><i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editroom"></i></span></td>
+                                 <td ng-click="deleteroom(hotelroom._id)" ng-class="'{{hotelroom._id}}'"><span><i class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>-->
+                           </tr>
+          
+          
+        </table>
+                  </div>
+            </div>
+          </div>
+          
+          <!-- /.panel --> 
+          
+        </div>
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+
+
+
+
+<!-- Modal -->
+  <div class="modal fade cutmer-infomt" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="padding:12px 20px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4> Customer Information</h4>
+        </div>
+        <div class="modal-body" style="padding:20px 30px;">
+             <div class="form-group">
+             <label for="usrname"><span class="glyphicon glyphicon-user"></span>Find Customer</label>
+            <div class="clint-dtls">
+                              <select ng-model="selectedcustomer" ng-change="changedcustomer(selectedcustomer)">
+                                  <option value="" disabled>---Customer Data---</option>
+                                  <option ng-repeat="cus_detail in customer_data" value="{{cus_detail}}">{{cus_detail.name}} | ID: {{cus_detail.govt_id}}</option>
+                                </select>
+            </div>
+             </div>
+            
+            
+            
+          <form role="form" method="post" ng-submit="newbooking()">
+            <div class="form-group">
+              <label for="usrname"><span class="glyphicon glyphicon-user"></span>Customer Name *</label>
+              <input required ng-required='booking.name' type="text" ng-model='booking.name' class="form-control" id="usrname" placeholder="Customer Name">
+            </div>
+             <div class="form-group">
+              <label for="psw"><i class="fa fa-envelope" aria-hidden="true"></i>ID(Any Government ID) *</label>
+              <input type="text" ng-model='booking.govt_id' class="form-control" id="psw" placeholder="Any Government ID">
+            </div>
+            <div class='col-lg-12'>
+                                <div class="form-group">
+                                    <label style="margin-left: -16px;" for="exampleInputPassword1"><i class="fa fa-image" aria-hidden="true"></i>Upload ID</label> <br>                 
+                                    <img  ng-src="{{govt_id_image}}" id="photo-id"  width="250px;"/>
+                <input type="file" name="file" multiple onchange="angular.element(this).scope().govt_id(this)" id="photo-upload"/>
+                                    <p ng-show="loading">...UPLOADING...</p>
+                                    
+                                </div>
+                              
+                      
+            </div>
+            <div class="form-group">
+              <label for="psw"><i class="fa fa-envelope" aria-hidden="true"></i>Customer Email</label>
+              <input type="email" ng-model='booking.email' class="form-control" id="psw" placeholder="Customer Email">
+            </div>
+              <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Date of birth *</label>
+              <input class="form-control" ng-model='booking.dob | date : "dd/MM/yyyy"' id="dateofbirth" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+            </div>
+              <div style="margin-left: -15px;" class="form-group col-md-6">
+              <label for="psw"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>Adults *</label>
+              <input type="number" min="0" ng-model='booking.adults' class="form-control" id="psw" placeholder="No of Adults">
+            </div>
+               <div style="float: right; margin-right: -15px;" class="form-group col-md-6">
+              <label for="psw"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>Children</label>
+              <input type="number" min="0" ng-model='booking.children' class="form-control" id="psw" placeholder="No of Children">
+            </div> 
+              <div class="form-group">
+              <label for="psw"><i class="fa fa-phone" aria-hidden="true"></i>Phone Number *</label>
+              <input type="number" min="0" ng-model='booking.phone' class="form-control" id="psw" placeholder="Phone Number">
+            </div>  
+              <div class="form-group">
+              <label for="psw"><i class="fa fa-map-marker" aria-hidden="true"></i>Address *</label>
+              <textarea class="form-control" ng-model='booking.address' id="psw" ></textarea>
+            </div>  
+               <div class="form-group">
+              <label for="psw"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>Description</label>
+              <textarea class="form-control" ng-model='booking.description' id="psw" ></textarea>
+            </div>  
+              
+           <button style="padding: 6px 20px;" ng-if="!booking.name || !booking.govt_id ||  !booking.adults || !booking.phone || !booking.address " type="submit" disabled ng-click="closemodelcustomer()"  class="btn defult_btn-green btn-block"><span class="glyphicon glyphicon-off"></span>Submit</button>
+
+              <button style="padding: 6px 20px;" ng-if="booking.name && booking.govt_id &&  booking.adults && booking.phone && booking.address " type="submit" ng-click="closemodelcustomer()"  class="btn defult_btn-green btn-block"><span class="glyphicon glyphicon-off"></span>Submit</button>
+          </form>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div> 
+
+<!-- Modal -->
+<div class="modal fade" id="viewbooking" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cutomer Details</h4>
+        
+      </div>
+        <div class="modal-body">
+                <table class="table table-hover">
+                            <tr> <th>Fields</th> <th>Data</th></tr>
+                            <tr> <td>Name</td> <td>{{activeCustomer.name}}</td> </tr>
+                            <tr> <td>ID</td> <td>{{activeCustomer.govt_id}}</td> </tr>
+                            <tr> <td>ID image</td> <td><img ng-if="!activeCustomer.govt_id_image" src="/admin/image/noimage.png" alt="no image" width="150px" height="150px"  class="profle-btn">
+                                                       <img ng-if="activeCustomer.govt_id_image" ng-src="{{activeCustomer.govt_id_image}}" alt="#" width="150px" height="100px" class="profle-btn"></td> </tr>
+                           
+                            <tr> <td>Email</td> <td>{{activeCustomer.email}}</td> </tr>
+                            <tr> <td>DOB</td> <td>{{activeCustomer.dob | date}}</td> </tr>
+                            <tr> <td>Adult</td> <td>{{activeCustomer.adults}}</td> </tr>
+                            <tr> <td>Children</td> <td>{{activeCustomer.children}}</td> </tr>
+                            <tr> <td>Phone</td> <td>{{activeCustomer.phone}}</td> </tr>
+                            <tr> <td>Address</td> <td>{{activeCustomer.address}}</td> </tr>
+                            <tr> <td>Description</td> <td>{{activeCustomer.description}}</td> </tr>
+                            <tr> <td>Check-In Date</td> <td>{{activeCustomer.arrival_date | date}}</td> </tr>
+                            <tr> <td>Check-Out Date</td> <td>{{activeCustomer.departure_date | date}}</td> </tr>
+                            <tr> <td>Total Days</td> <td>{{activeCustomer.total_days}}</td> </tr>
+                            <tr> <td>Status</td> <td>{{activeCustomer.status}}</td> </tr>
+                            <tr> <td>Assigned By</td> <td>{{activeCustomer.assigned_by}}</td> </tr>
+                            <tr> <td>Payment</td> <td>{{activeCustomer.payment}}</td> </tr>
+                            <tr> <td>Payment Method</td> <td>{{activeCustomer.payment_method}}</td> </tr>
+                            <tr> <td>Room Number</td> <td><li ng-repeat="item in activeCustomer.room_booked">
+                               {{item.room_number}}
+                            </li></td> </tr>
+                            <tr> <td>Room Type</td> <td><li ng-repeat="item in activeCustomer.room_booked">
+                               {{item.room_type}}
+                            </li></td> </tr>
+                            <tr> <td>Booking Date</td> <td>{{activeCustomer.created_at | date}}</td> </tr>
+                                           
+                </table>
+  
+        
+      </div>
+      <div class="modal-footer"> </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="invoicebill_cus" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cutomer Invoice</h4>
+      </div>
+
+  <div class="modal-body">
+         <div class="invce">
+             <form role="form" method="post" ng-submit="saveinvoice()">
+                <div class="booking-dtls paymt-meth" id="content">
+                  <div class="paytm-btm-bdr">
+                    
+                    <div class="col-sm-4">                     
+                        <select class="form-control" ng-model="activeInvoice.payment_method">
+                          <option value="" disabled>---Payment Method---</option>
+                          <option value="cash">Cash</option>
+                          <option value="credit/debit">Credit/Debit</option>
+                        </select>                    
+                    </div>
+                  </div>
+                  <div class="bkg-dtlsinnr aditnl-serv">
+                    <div class="payment-meth">
+                      <div class="invoice-tbl">
+                        <table style="margin-left: -12px; width: 512px;" width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <th>Description</th>
+                            <th style="width: 70px;">Days/Quantity</th>
+                            <th>Unit Price</th>
+                            <th style="width: 170px;">Line Total</th>
+                          </tr>
+                          <tr  ng-repeat='room in activeInvoice.room_booked'>
+                            <td>{{room.room_type}}/{{room.room_number}}</td>
+                            <td>{{activeInvoice.total_days}}</td>
+                            <td>${{room.price}}</td>
+                            <td>${{room.price*activeInvoice.total_days}}</td>
+                          </tr>
+                          
+                          <tr  ng-repeat='service in activeInvoice.client_service'>
+                            <td>{{service.service}}</td>
+                            <td></td>
+                            <td>${{service.price}}</td>
+                            <td>${{service.price}}</td>
+                          </tr>
+                          
+                          <tr  ng-repeat='thacking in activeInvoice.client_thacking'>
+                            <td>{{thacking.order}}</td>
+                            <td>{{thacking.quantity}}</td>
+                            <td>${{thacking.price}}</td>
+                            <td>${{thacking.price*thacking.quantity}}</td>
+                          </tr>
+                          
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>SubTotal</td>
+                            <td>${{insubtotal}}</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Tax<input id="hidetext" style="width: 43%; margin-left: 5px;" type='text' ng-model="activeInvoice.tax"/><span class="vlauehidden">{{activeInvoice.tax}}</span>%</td>
+                            <td>${{(activeInvoice.tax*insubtotal)/100}}</td>
+                          </tr>
+                           <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Discount</td>
+                            <td>$<input style="width: 45%;" type='text' ng-model="activeInvoice.discount"/><span class="vlauehidden">{{activeInvoice.discount}}</span></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total</strong></td>
+                            <td><strong><span>$<input style="width: 82%; border: none;" id="total" readonly type="text" value="{{((insubtotal+((activeInvoice.tax*insubtotal)/100))-activeInvoice.discount)}}" /></span><span style="visibility: hidden;">{{((insubtotal+((activeInvoice.tax*insubtotal)/100))-activeInvoice.discount)}}</span></strong></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               <div class="booking-dtls paymt-meth" id="printcontent" style="display:none;">
+                  <div class="paytm-btm-bdr">
+                    
+                    <div class="col-sm-4">                     
+                        <select class="form-control" ng-model="activeInvoice.payment_method">
+                          <option value="" disabled>---Payment Method---</option>
+                          <option value="cash">Cash</option>
+                          <option value="credit/debit">Credit/Debit</option>
+                        </select>                    
+                    </div>
+                  </div>
+                  <div class="bkg-dtlsinnr aditnl-serv">
+                    <div class="payment-meth">
+                      <div class="invoice-tbl">
+                        <table  width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <th>Description</th>
+                            <th>Days/Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Line Total</th>
+                          </tr>
+                          <tr  ng-repeat='room in activeInvoice.room_booked'>
+                            <td>{{room.room_type}}/{{room.room_number}}</td>
+                           <td>{{activeInvoice.total_days}}</td>
+                            <td>${{room.price}}</td>
+                            <td>${{room.price*activeInvoice.total_days}}</td>
+                          </tr>
+                          
+                          <tr  ng-repeat='service in activeInvoice.client_service'>
+                            <td>{{service.service}}</td>
+                            <td></td>
+                            <td>${{service.price}}</td>
+                            <td>${{service.price}}</td>
+                          </tr>
+                          
+                          <tr  ng-repeat='thacking in activeInvoice.client_thacking'>
+                            <td>{{thacking.order}}</td>
+                            <td>{{thacking.quantity}}</td>
+                            <td>${{thacking.price}}</td>
+                            <td>${{thacking.price}}</td>
+                          </tr>
+                          
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>SubTotal</td>
+                            <td>${{insubtotal}}</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Tax<span class="vlauehidden">{{activeInvoice.tax}}</span>%</td>
+                            <td>${{(activeInvoice.tax*insubtotal)/100}}</td>
+                          </tr>
+                           <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Discount</td>
+                            <td>$<span class="vlauehidden">{{activeInvoice.discount}}</span></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total</strong></td>
+                            <td><strong><span>$<input style="width: 82%; border: none;" id="total" readonly type="text" value="{{((insubtotal+((activeInvoice.tax*insubtotal)/100))-activeInvoice.discount)}}" /></span><span style="visibility: hidden;">{{((insubtotal+((activeInvoice.tax*insubtotal)/100))-activeInvoice.discount)}}</span></strong></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-3">
+                  <div class="row">
+                    <div class="print-lbl">
+                      <ul>
+                        <li style="margin-left: -19px;">
+                          <button type="submit"   class="btn defult_btn-green btn-block"><span class="glyphicon glyphicon-off"></span>Save</button>
+                        </li>
+                       
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+             </form>
+                
+              </div>
+      
+      
+       <div class="print-lbl">
+            <ul>
+                       <li>
+                            <button  onclick="$('#printcontent').print();" id="print" class="btn defult_btn-yellow"><i class="fa fa-print" aria-hidden="true"></i> Print invoice</button>
+                          </li>
+                          <li>
+                            <button id="cmd" class="btn defult_btn-red"><i class="fa fa-print" aria-hidden="true"></i> Save PDF</button>
+                          </li>
+                      </ul>
+      </div>
+      <div class="modal-footer"> </div>
+    </div>
+  </div>
+</div></div>
+
+    

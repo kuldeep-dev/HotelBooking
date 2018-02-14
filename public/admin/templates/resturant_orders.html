@@ -1,0 +1,374 @@
+<style>
+    .menu-box label:before {
+  content: url("/admin/image/unchecked_checkbox.png");
+  position: absolute;
+  z-index: 100;
+}
+:checked+label:before {
+  content: url("/admin/image/checked_checkbox.png");
+}
+input[type=checkbox] {
+  display: none;
+}
+/*pure cosmetics:*/
+/*.menu-box img {
+  width: 150px;
+  height: 150px;
+}*/
+.menu-box label {
+  margin: 10px;
+}
+</style>
+
+
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="service-page">
+       <div class="col-sm-6">
+        <h1 class="page-header">Resturant Orders</h1>
+        </div>
+        </div>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="service-tickets">
+        <div class="col-sm-12">
+		 <div class="col-sm-3">
+        <div class="addrom">
+      <button class="btn defult_btn-yellow"  data-toggle="modal" data-target="#addneworder">New Order</button>
+           </div>
+        </div>
+            <div class="col-sm-9">
+          <div class="seacrh-rgt">
+              <div class="seacrh-group">
+                  <input type="text" name="q" class="form-control" ng-model="searchres" placeholder="Search...">
+                <i class="fa fa-search" aria-hidden="true"></i> </div>
+          </div></div>
+        </div>
+		
+        <div class="ticket-detils">
+        
+       <table id="resturantorder" width="100%" border="0" cellspacing="0" cellpadding="0" class="tickts-tabl">
+           <thead>
+           <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Customer Name</th>
+            <th>Order No.</th>
+            <th>Table No.</th>
+            <!--<th>Assigned by</th>-->
+            <th>Action</th>
+          </tr>
+           </thead>
+           <tbody>
+          <tr ng-repeat='resturantdata in resturant | filter : searchres'>
+            <td ng-class="'{{resturantdata._id}}'">{{resturantdata.created_at | date }}</td>
+            <td ng-class="'{{resturantdata._id}}'">{{resturantdata.created_at | date:'HH:mm'}}</td>
+            <td ng-class="'{{resturantdata._id}}'">{{resturantdata.name}}</td>
+            <td ng-class="'{{resturantdata._id}}'">{{resturantdata.order_no}}</td>
+            <td ng-class="'{{resturantdata._id}}'">{{resturantdata.table_no}}</td>
+            <td><span><i ng-class="'{{resturantdata._id}}'" ng-click='setActive(resturantdata)' class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#orderdetails"></i></span> |    
+            <span><i ng-click="deleteorder(resturantdata._id)" ng-class="'{{resturantdata._id}}'" class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>
+          </tr>
+           </tbody>
+        </table>
+
+          
+        </div><!--profile-detils ends-->
+
+			</div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+  
+
+
+  <!-- Modal -->
+
+  
+  <div id="addneworder" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add new order</h4>
+      </div>
+      <div class="modal-body">
+ <div id="home" class="tab-pane fade in active">
+      <div class="row">
+              <div class="col-sm-12">
+              
+             <form role="form" method="post" ng-submit="newresturantdatadata()">
+             
+             <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="email" >Customer Name:</label>
+                  <input type="text" ng-model='resturant.name' class="form-control" id="email" placeholder="Customer Name">
+                </div>
+              </div>  
+              
+             <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="email" >Table no.:</label>
+                  <input type="text" ng-model='resturant.table_no' class="form-control"  placeholder="43" >
+                </div>
+              </div>  
+             
+                <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="email" >Order no.:</label>
+                  <input type="text"  value="{{order_no}}" class="form-control " readonly  >
+                </div>
+              </div>  
+              
+                 
+              
+              <div class="col-sm-6">
+                <div class="form-group selct-food">
+                  <label for="pwd" >Food Category:</label>
+                 <select ng-model="selectemenurestu" id="selectedresturantValue" ng-change="selectedmenurestuValue(selectemenurestu)">
+                  <option value="" disabled>---Select Category---</option>
+                  <option ng-repeat="menures in menudatarestur" value="{{menures}}">{{menures.menu_name}}</option>
+                </select>
+                </div>
+              </div>
+                
+               <div class="payment-meth">
+                            <div class="invoice-tbl">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0" class="sidetr">
+                                <tr>
+                                  <th>Description</th>
+                                  <th>Unit Price</th>
+                                  <th>Days/Quantity</th>
+                                  <th>Line Total</th>
+                                  <th>Cancel</th>
+                                </tr>
+                                <tbody ng-init="(total = 0) || (act.quantity = 1)">
+                                <tr ng-repeat="itemsdata in new_menuitem track by $index">
+                                  <td>{{itemsdata.order}}</td>
+                                  <td>${{itemsdata.price}}</td>
+                                  <td><input id="hidetext" style="width: 43%; margin-left: 5px;" ng-model="itemsdata.quantity" ng-change="updateTotal()"/></td>
+                                  <td>${{(itemsdata.price)*(itemsdata.quantity)}}</td>
+                                  <td><span><i class="fa fa-times delete-icn" ng-click="remove(itemsdata)" aria-hidden="true"></i></span></td>
+                                </tr>
+                                
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td><strong>Sub Total</strong></td>
+                                  <td><strong>${{total}}</strong></td>
+                                </tr>
+                                
+                                <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Tax<input id="hidetext" style="width: 43%; margin-left: 5px;" type='text' ng-model="resturant.tax"/>%</td>
+                                <td ng-if="resturant.tax">${{(resturant.tax*total)/100}}</td>
+                                </tr>
+                                
+                                <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Discount</td>
+                                <td>$<input style="width: 45%;" type='text' ng-model="resturant.discount"/></td>
+                                </tr>
+                                
+                                <tr>
+                                <td></td>
+                                <td></td>
+                                <td><strong>Total</strong></td>
+                                <td ng-if="resturant.tax"><strong><span>$<input style="width: 75%; border: none;" id="total" readonly type="text" value="{{((total+((resturant.tax*total)/100))-resturant.discount)}}" /></span><span style="visibility: hidden;">{{((insubtotal+((activeInvoice.tax*insubtotal)/100))-activeInvoice.discount)}}</span></strong></td>
+                                </tr>
+                              
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                       
+              
+                	<input type="submit" ng-click="closemodelorder();" class="btn defult_btn-green pull-left" value="Submit">
+                
+              </form>        
+<!--              </div>-->
+              
+              </div></div>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+  </div>
+  
+  
+  <div id="orderdetails" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style="border-radius:0;">
+        <div id="printcontent">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Order Details</h4>
+      </div>
+            
+            <div class="resrw" style="width: 100%; margin: 8px 0 0 77px;">
+            <div class="row">
+                <div class="col-sm-6">
+            
+                    <h5 class="modal-title">Order Date</h5></div><div class="col-sm-6"> {{resturantservice.created_at | date}}</div>
+                    <div class="col-sm-6"> <h5 class="modal-title">Customer Name</h5></div> 
+                    <div class="col-sm-6">{{resturantservice.name}}</div>
+                    <div class="col-sm-6">  <h5 class="modal-title">Order No.</h5></div>
+                    <div class="col-sm-6">{{resturantservice.order_no}}</div>
+                    <div class="col-sm-6"> <h5 class="modal-title">Table No.</h5></div>
+                    <div class="col-sm-6">{{resturantservice.table_no}}</div></div> </div>
+        
+    <div class="bkg-dtlsinnr aditnl-serv">
+                    <div class="payment-meth">
+                      <div class="invoice-tbl">
+                        <table  width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Line Total</th>
+                          </tr>
+                          <tr  ng-repeat='resturant in resturantservice.order_detail'>
+                            <td>{{resturant.order}}</td>
+                            <td>{{resturant.quantity}}</td>
+                            <td>${{resturant.price}}</td>
+                            <td>${{resturant.price*resturant.quantity}}</td>
+                          </tr>
+                          
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Sub Total</td>
+                            <td>${{insubtotal}}</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Tax<span class="vlauehidden">{{resturantservice.tax}}</span>%</td>
+                            <td>${{(resturantservice.tax*insubtotal)/100}}</td>
+                          </tr>
+                           <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Discount</td>
+                            <td>$<span class="vlauehidden">{{resturantservice.discount}}</span></td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total</strong></td>
+                            <td><strong><span>${{((insubtotal+((resturantservice.tax*insubtotal)/100))-resturantservice.discount)}}</span></strong></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+        </div>
+        <div class="print-lbl" style="background-color: #fff;">
+            <ul>
+                       <li>
+                            <button  onclick="$('#printcontent').print();" id="print" class="btn defult_btn-yellow"><i class="fa fa-print" aria-hidden="true"></i> Print invoice</button>
+                          </li>
+                          <li>
+                            <button id="cmd" class="btn defult_btn-red"><i class="fa fa-print" aria-hidden="true"></i> Save PDF</button>
+                          </li>
+                      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="editorder" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Order</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="editResturantdata()">
+  <div class="form-group">
+    <label for="email">Name:</label>
+    <input ng-model='resturantservice.name' type="text" class="form-control" id="">
+  </div>
+          
+          <div class="form-group">
+    <label for="email">Food:</label>
+    <select class="form-control selct-food" ng-model='resturantservice.order'>
+                 <option value="" disabled>---Select Food---</option>
+                    <option  value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    
+                 </select>
+  </div>
+          <div class="form-group">
+    <label for="email">Table no:</label>
+    <input ng-model='resturantservice.table_no' type="text" class="form-control" id="">
+  </div>
+          
+          <div class="form-group">
+    <label for="email">Description:</label>
+    <textarea class="form-control" cols="120" ng-model='resturantservice.description' rows="4" placeholder="Description"></textarea>
+  </div>
+      
+  
+  
+          <button type="submit" ng-click="closemodelorder();" class="btn defult_btn-green">Update Order</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+  
+  
+<div id="itemreturvalue" class="modal fade menu-box" role="dialog">
+    <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style=" position: absolute; left: 0; top: 0;right: 0;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Select food</h4>
+      </div>
+        
+      <div class="modal-body">
+      
+           <div  ng-repeat='serv in activemenurestucat.menu_item' style="width: 20%; float:left;">
+             <div class="menuitem">                 
+             <input type="checkbox" name="serice" id="{{serv._id}}" class="services" value="{{serv}}"  ng-click="selectedmenuItem(serv,servicedetails)" ng-model="servicedetails">
+                          <label for="{{serv._id}}" style="width: 80px; height: 80px;">
+                                <img src="{{serv.item_image}}" style="width:100%; height:100%; border-radius: 5px;"> ${{serv.price}}
+                            </label>
+                          </div>
+        </div> 
+          
+      </div>
+          
+    </div>
+
+  </div>
+ 
+</div>  
+  

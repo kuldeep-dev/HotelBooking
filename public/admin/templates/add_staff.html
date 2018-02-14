@@ -1,0 +1,351 @@
+<style>
+    .datepicker {
+      z-index: 1600 !important; /* has to be larger than 1050 */
+    }
+</style>
+
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="service-page">
+       <div class="col-sm-6">
+        <h1 class="page-header">Hotel Staff</h1>
+        </div>
+     
+        </div>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="service-tickets">
+        <div class="col-sm-3">
+        <div class="addrom">
+      <button class="btn defult_btn-yellow"  data-toggle="modal" data-target="#addstaff">Add Staff</button>
+           </div>
+        </div>
+            
+                <div class="col-sm-9">
+          <div class="seacrh-rgt">
+              <div class="seacrh-group">
+                  <input type="text" name="q" class="form-control" ng-model="searchstaff" ng-model="searchser" placeholder="Search...">
+                <i class="fa fa-search" aria-hidden="true"></i> </div>
+            </div>
+        </div>
+		
+        <div class="ticket-detils">
+        
+       <table id="staffdata" width="100%" border="0" cellspacing="0" cellpadding="0" class="tickts-tabl">
+          <thead>
+           <tr>
+            <th>Sr. No.</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Joining date</th>
+            <th>Salary</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tr ng-repeat="staff in hotelstaff | filter : searchstaff track by $index">
+
+              <td ng-class="'{{staff._id}}'">{{$index+1}}</td>   
+              <td ng-class="'{{staff._id}}'">{{staff.id_card}}</td>
+              <td ng-class="'{{staff._id}}'">{{staff.name}}</td>
+              <td ng-class="'{{staff._id}}'">{{staff.position}}</td>
+              <td ng-class="'{{staff._id}}'">{{staff.joining_date | date}}</td>
+              <td ng-class="'{{staff._id}}'">{{staff.salary}}</td>
+              <td ng-class="'{{staff._id}}'">{{staff.status}} | <span><i ng-class="'{{staff._id}}'" ng-click="setActive(staff)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editstatus"></i></span></td>
+              <td><span><i ng-class="'{{staff._id}}'" ng-click='setActive(staff)' class="fa fa-eye" aria-hidden="true" data-toggle="modal"  data-target="#viewstaff"></i></span> |       
+              <span><i ng-class="'{{staff._id}}'" ng-click="setActive(staff)" class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"  data-target="#editstaff"></i></span> |
+              <span><i ng-click="deletestaff(staff._id)" ng-class="'{{staff._id}}'" class="fa fa-times delete-icn" aria-hidden="true"></i></span></td>
+        </tr>
+          
+          
+        </table>
+
+          
+        </div><!--profile-detils ends-->
+
+			</div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+  <!-- /#page-wrapper --> 
+  
+
+
+
+<!-- Modal -->
+<div id="addstaff" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Staff Information</h4>
+      </div>
+        
+      <div class="modal-body">
+      <form role="form" method="post"  ng-submit="addhotelstaff()">
+      
+        <div class="form-group">
+          <label for="name"><span class="glyphicon glyphicon-user"></span>Name:</label>
+          <input type="text" class="form-control" ng-model='staff.name' >
+        </div>
+          
+        <div class="form-group">
+          <label for="name"><i class="fa fa-envelope" aria-hidden="true"></i>ID:</label>
+          <input type="text" class="form-control" ng-model='staff.idcard' >
+        </div>  
+          
+        <div class='col-lg-12'>
+                <div class="form-group">
+                <label style="margin-left: -16px;" for="exampleInputPassword1"><i class="fa fa-image" aria-hidden="true"></i>Profile Image</label> <br>                 
+                <img  ng-src="{{hotel_staff_image}}" id="photo-id"  width="250px;"/>
+                <input type="file" name="file" multiple onchange="angular.element(this).scope().staff_image(this)" id="photo-upload"/>
+                <p ng-show="loading">...UPLOADING...</p>
+                </div>
+        </div> 
+          
+        <div class="form-group">
+          <label for="name"><i class="fa fa-envelope" aria-hidden="true"></i>Email:</label>
+          <input type="email" class="form-control" ng-model='staff.email'>
+        </div>    
+          
+          
+        <div class="form-group">
+          <label for="pwd"><span class="glyphicon glyphicon-user"></span>Gender:</label>
+
+    <div class="row">
+          <div class="col-sm-12">
+       <input type="radio" ng-model='staff.gender' name="gender" value="male" > Male
+        <input type="radio" ng-model='staff.gender' name="gender" value="female" > Female
+        </div>
+    </div>
+        </div>
+          
+        <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Date of birth</label>
+              <input class="form-control" ng-model='staff.dob | date : "dd/MM/yyyy"' id="staffdateofbirth" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+        </div>
+          
+        <div class="form-group">
+             <label for="pwd"><span class="glyphicon glyphicon-user"></span>Position:</label>
+            <input type="text" class="form-control" ng-model='staff.position'>
+        </div>
+          
+        <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Joining Date</label>
+              <input class="form-control" ng-model='staff.joining_date | date : "dd/MM/yyyy"' id="joiningdate" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+        </div>  
+          
+       <div class="form-group">
+        <label for="pwd"><span class="glyphicon glyphicon-user"></span>Salary:</label>
+        <input type="text" class="form-control" ng-model='staff.salary'>
+      </div>
+          
+        <div class="form-group">
+            <label for="pwd"><i class="fa fa-phone" aria-hidden="true"></i>Phone:</label>
+            <input type="text" class="form-control" ng-model='staff.phone'>
+          </div>
+  
+        <div class="form-group">
+            <label for="pwd"><i class="fa fa-map-marker" aria-hidden="true"></i>Address:</label>
+           <textarea class="form-control" ng-model='staff.address' id="psw" ></textarea>
+          </div>
+  
+        <div class="form-group">
+            <label for="pwd"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>Description:</label>
+            <textarea class="form-control" ng-model='staff.description' id="psw" ></textarea>
+          </div>
+  
+  <button type="submit" class="btn defult_btn-green">Submit</button>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- view modal -->
+
+<div class="modal fade" id="viewstaff" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cutomer Details</h4>
+        
+      </div>
+        <div class="modal-body">
+                <table class="table table-hover">
+                            <tr> <th>Fields</th> <th>Data</th></tr>
+                            <tr> <td>Name</td> <td>{{activestaff.name}}</td> </tr>
+                            <tr> <td>ID</td> <td>{{activestaff.id_card}}</td> </tr>
+                            <tr> <td>Image</td> <td><img ng-if="!activestaff.staff_image" src="/admin/image/noimage.png" alt="no image" width="150px" height="150px"  class="profle-btn">
+                                                    <img ng-if="activestaff.staff_image" ng-src="{{activestaff.staff_image}}" alt="#" width="150px" height="100px" class="profle-btn"></td> </tr>
+                            <tr> <td>Email</td> <td>{{activestaff.email}}</td> </tr>
+                            <tr> <td>Gender</td> <td>{{activestaff.gender}}</td> </tr>
+                            <tr> <td>DOB</td> <td>{{activestaff.dob | date}}</td> </tr>
+                            <tr> <td>Position</td> <td>{{activestaff.position}}</td> </tr>
+                            <tr> <td>Joining Date</td> <td>{{activestaff.joining_date | date}}</td> </tr>
+                            <tr ng-if="activestaff.leaving_date"> <td>Leaving Date</td> <td>{{activestaff.leaving_date | date}}</td> </tr>
+                            <tr> <td>Salary</td> <td>{{activestaff.salary}}</td> </tr>
+                            <tr> <td>Phone</td> <td>{{activestaff.phone}}</td> </tr>
+                            <tr> <td>Address</td> <td>{{activestaff.address}}</td> </tr>
+                            <tr> <td>Description</td> <td>{{activestaff.description}}</td> </tr>
+                            <tr> <td>Status</td> <td>{{activestaff.status}}</td> </tr>
+                            
+                </table>
+  
+        
+      </div>
+      <div class="modal-footer"> </div>
+    </div>
+  </div>
+</div>
+
+<!------view-modal-end---------->
+
+<!-----edit-modal---->
+<div id="editstaff" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Staff Information</h4>
+      </div>
+        
+      <div class="modal-body">
+      <form role="form" method="post"  ng-submit="editstaffdata()">
+      
+        <div class="form-group">
+          <label for="name"><span class="glyphicon glyphicon-user"></span>Name:</label>
+          <input type="text" class="form-control" ng-model='activestaff.name' >
+        </div>
+          
+        <div class="form-group">
+          <label for="name"><span class="glyphicon glyphicon-user"></span>ID:</label>
+          <input type="text" class="form-control" ng-model='activestaff.id_card' >
+        </div>  
+          
+        <div class='col-lg-12'>
+                <div class="form-group">
+                <div class="profile-cirlc">
+                <div class="profile-imag">
+                    <img ng-if="!activestaff.staff_image" src="/admin/image/noimage.png" alt="no image" class="profle-btn" width="150px">
+                    <img ng-if="activestaff.staff_image && !hotel_staff_image" ng-src="{{activestaff.staff_image}}" alt="#" width="150px" class="profle-btn">
+                    <img ng-src="{{hotel_staff_image}}" ng-show="staff_image" alt="#" class="profle-btn" width="150px">
+                </div></div></div>
+                <input type="file" name="file" multiple onchange="angular.element(this).scope().staff_image(this)" id="photo-upload"/>
+                <p ng-show="loading">...UPLOADING...</p>
+        </div> 
+          
+        <div class="form-group">
+          <label for="name"><span class="glyphicon glyphicon-user"></span>Email:</label>
+          <input type="email" class="form-control" ng-model='activestaff.email'>
+        </div>    
+          
+          
+        <div class="form-group">
+          <label for="pwd"><span class="glyphicon glyphicon-user"></span>Gender:</label>
+
+    <div class="row">
+          <div class="col-sm-12">
+       <input type="radio" ng-model='activestaff.gender' name="gender" value="male" > Male
+        <input type="radio" ng-model='activestaff.gender' name="gender" value="female" > Female
+        </div>
+    </div>
+        </div>
+          
+        <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Date of birth</label>
+              <input class="form-control" ng-model='activestaff.dob | date : "dd/MM/yyyy"' id="editstaffdateofbirth" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+        </div>
+          
+        <div class="form-group">
+             <label for="pwd"><span class="glyphicon glyphicon-user"></span>Position:</label>
+            <input type="text" class="form-control" ng-model='activestaff.position'>
+        </div>
+          
+        <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Joining Date</label>
+              <input class="form-control" ng-model='activestaff.joining_date | date : "dd/MM/yyyy"' id="editjoiningdate" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+        </div> 
+          
+          
+       <div class="form-group">
+        <label for="pwd"><span class="glyphicon glyphicon-user"></span>Salary:</label>
+        <input type="text" class="form-control" ng-model='activestaff.salary'>
+      </div>
+          
+        <div class="form-group">
+            <label for="pwd"><span class="glyphicon glyphicon-user"></span>Phone:</label>
+            <input type="text" class="form-control" ng-model='activestaff.phone'>
+          </div>
+  
+        <div class="form-group">
+            <label for="pwd"><span class="glyphicon glyphicon-user"></span>Address:</label>
+           <textarea class="form-control" ng-model='activestaff.address' id="psw" ></textarea>
+          </div>
+  
+        <div class="form-group">
+            <label for="pwd"><span class="glyphicon glyphicon-user"></span>Description:</label>
+            <textarea class="form-control" ng-model='activestaff.description' id="psw" ></textarea>
+          </div>
+  
+  <button type="submit" class="btn defult_btn-green">Submit</button>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+<!------edit-modal-end---------->
+
+
+<!-----edit-status-modal---->
+<div id="editstatus" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Status</h4>
+      </div>
+        
+      <div class="modal-body">
+      <form role="form" method="post"  ng-submit="editstatusdata()">
+      
+          <div class="form-group">
+        <label for="pwd">Status:</label>
+        <select class="form-control" ng-model='activestaff.status'>
+                <option selected="selected" disabled="disabled">Status</option>    
+                <option value="working">Working</option>
+                <option value="leaved">Leaved</option>
+        </select>            
+        </div>   
+          
+        <div class="form-group">
+              <label for="psw"><i class="fa fa-calendar"></i>Leaving Date</label>
+              <input class="form-control" ng-model='activestaff.leaving_date | date : "dd/MM/yyyy"' id="leaving_date" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+        </div>   
+       
+  
+        <button type="submit" class="btn defult_btn-green">Submit</button>
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!------edit-status-modal-end---------->

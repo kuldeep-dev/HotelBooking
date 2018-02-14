@@ -1,0 +1,163 @@
+<style>
+    .datepicker {
+      z-index: 1600 !important; /* has to be larger than 1050 */
+    }
+</style>
+<div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Admin Setting</h1>
+      </div>
+      <!-- /.col-lg-12 --> 
+    </div>
+    
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="admin-profile">
+		<h2>Admin Profile</h2>
+        
+        <div class="profile-detils">
+          <div class="profile-detilsinr">
+        <div class="col-sm-4">
+        	<div class="profile-pht">
+            <div class="profile-cirlc">
+            <div class="profile-imag">
+            	 <img ng-if="!user.image" ng-show="!imgshow" src="/admin/image/noimage.png" alt="no image" class="profle-btn">
+                 <img ng-if="currentUser.image && !imgshow" ng-src="{{currentUser.image}}" alt="#" class="profle-btn">
+                </div>
+                </div>
+            </div>        
+        </div>
+               <div class="col-sm-8">
+                    <div class="profil-data">
+        <table class="table table-hover col-sm-4">
+              <tr>
+                                                    <th>Fields</th>
+                                                    <th>Data</th>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>{{currentUser.name}}</td>
+                                                </tr>
+                                               
+                                                <tr>
+                                                    <td>Date of birth</td>
+                                                    <td>{{currentUser.dob | date}}</td
+                                                </tr>
+                                                <tr>
+                                                    <td>Phone no.</td>
+                                                    <td>{{currentUser.phone}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td>{{currentUser.email}}</td>
+                                                </tr>
+                                                
+                                            </table>
+                   <div class="col-sm-3">
+                <input type="button" data-toggle="modal"  data-target="#editprofile" class="btn defult_btn pull-left" value="Edit Profile">
+                 </div>
+                <div class="col-sm-9">
+                 <input type="button" data-toggle="modal"  data-target="#changepassword" class="btn defult_btn pull-left" value="Change Password">
+                </div>
+             </div>
+             </div>
+               
+        
+        </div>
+            
+            
+        </div><!--profile-detils ends-->
+
+			</div><!--admin-profile ends-->
+      </div>
+      <!-- /.col-lg-8 --> 
+      
+    </div>
+    <!-- /.row --> 
+  </div>
+
+
+<div id="editprofile" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit your profile</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="editUser()">
+  <div class="form-group">
+   <div class="profile-dtimage">
+            <div class="profile-cirlc">
+            <div class="profile-imag">
+                            
+                            <img ng-if="!user.image" ng-show="!imgshow" src="/admin/image/noimage.png" alt="no image" class="profle-btn">
+                            <img ng-if="currentUser.image && !imgshow" ng-src="{{currentUser.image}}" alt="#" class="profle-btn">
+                            <img ng-src="{{imgshow}}" ng-show="imgshow" alt="#" class="profle-btn">
+            </div>
+            </div>
+   </div>
+                </div>
+                <input type="file" name="file" onchange="angular.element(this).scope().fileNameChanged(this)" id="photo-upload"/>
+                                 <p ng-show="loading">...UPLOADING...</p>
+          <div class="form-group">
+    <label for="email">Name:</label>
+    <input ng-model='currentUser.name' type="text" class="form-control" id="name">
+  </div>
+  <div class="form-group">
+    <label for="pwd">Date of birth:</label>
+    <input class="form-control" ng-model='currentUser.dob | date : "dd/MM/yyyy"' id="dateofbirthadmin" name="dob" placeholder="DD/MM/YYYY" type="text"/>
+  </div>
+    <div class="form-group">
+    <label for="pwd">Phone no.:</label>
+    <input ng-model='currentUser.phone' type="text" class="form-control" id="phone">
+  </div>
+  <button type="submit" ng-click="" class="btn defult_btn-green">Update Profile</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+<div id="changepassword" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+      <form role="form" method="post" ng-submit="changepass(user)">
+  
+          <div class="form-group">
+    <label for="email">Old Password:</label>
+    <input ng-model='user.password' type="password" class="form-control" >
+  </div>
+  <div class="form-group">
+    <label for="pwd">New Password:</label>
+    <input ng-model='user.newpassword' type="password" class="form-control" >
+  </div>
+    <div class="form-group">
+    <label for="pwd">Confirm Password:</label>
+    <input ng-model='user.cpassword' type="password" class="form-control" >
+  </div>
+  
+  
+          <button type="submit" ng-click="" class="btn defult_btn-green">Update Password</button>
+</form>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
